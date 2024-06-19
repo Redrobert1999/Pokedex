@@ -51,24 +51,25 @@ class TreeNode:
         self.value = value
         self.children = []
 
-    def dfs_autocorrect(self, to_find, index):
-        to_search = [self]
-        while to_search:
-            current_node = to_search.pop()
-            print(f"searching {current_node.value[0]}")
-            if to_find in current_node.value[index]:
-                description(current_node.value)
+def dfs_autocorrect(node, to_find, index):
+    to_search = [node]
+    while to_search:
+        current_node = to_search.pop()
+        print(f"searching {current_node.value[0]}")
+        if to_find in current_node.value[index]:
+            description(current_node.value)
 
-            to_search += current_node.children
+        to_search += current_node.children
 
-    def dfs_regular(self, to_find, index):
-        to_search = [self]
-        while to_search:
-            current_node = to_search.pop()
-            print(f"searching {current_node.value[0]}")
-            if to_find == current_node.value[index]:
-                description(current_node.value)
+def dfs_regular(node, to_find, index):
+    stack = [node]
 
+    while to_search:
+        current_node = stack.pop()
+        print(f"searching {current_node.value[0]}")
+        if to_find == current_node.value[index]:
+            description(current_node.value)
+        if current_node.children:
             to_search += current_node.children
 
 
@@ -98,5 +99,34 @@ def description(lst):
 def start_up():
     print("Initializing startup...")
     root_node = build_tree(pokemon)
-    print("Startup complete.")
+    main_menu()
+    auto_or_reg(root_node)
 
+
+def main_menu():
+    print("Startup complete.")
+    print("---------------------------------------------------------------------------------------------------------")
+    print("\nVer 0.4\nWelcome to the Pokedex.")
+
+
+def auto_or_reg(root_node):
+    index = input("\n\nPlease select a search option below and enter the corrisponding letter."
+                  "\n        [1] Name    [2] Index    [3] Type\n\n")
+    index = int(index) - 1
+    choice = input("\n\nPlease select a if you want autocorrect enabled for this search."
+                   "\n          [Y] Yes         [N] No\n\n")
+    index_list = ["Name", "Index", "Type"]
+    if choice == "N":
+        to_find = input(f"Please type the {index_list[index]} of the pokemon(s) "
+                        "\nyou would like information about\n\n")
+        dfs_regular(root_node, to_find, index)
+    elif choice == "Y":
+        pass
+    else:
+        print("Entry not recognized.")
+        auto_or_reg()
+
+
+
+
+start_up()
