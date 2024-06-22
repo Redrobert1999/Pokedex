@@ -52,25 +52,37 @@ class TreeNode:
         self.children = []
 
 def dfs_autocorrect(node, to_find, index):
-    to_search = [node]
-    while to_search:
-        current_node = to_search.pop()
+    stack = [node]
+    found = []
+    while stack:
+        current_node = stack.pop()
         print(f"searching {current_node.value[0]}")
         if to_find in current_node.value[index]:
-            description(current_node.value)
-
-        to_search += current_node.children
+            found.append(current_node.value)
+        if current_node.children == [None, None]:
+            stack += current_node.children
+    if found == []:
+        print("No matching Pokemon found.")
+    else:
+        for item in found:
+            print(item[0])
 
 def dfs_regular(node, to_find, index):
     stack = [node]
-
-    while to_search:
+    found = []
+    while stack:
         current_node = stack.pop()
         print(f"searching {current_node.value[0]}")
         if to_find == current_node.value[index]:
-            description(current_node.value)
-        if current_node.children:
-            to_search += current_node.children
+            found.append(current_node)
+        if current_node.children != [None, None]:
+            stack += current_node.children
+    if found == []:
+        print("No matching pokemon found.")
+    else:
+        for item in found:
+            description(item.value)
+
 
 
 def build_tree(lst, index=0):
@@ -84,6 +96,7 @@ def build_tree(lst, index=0):
 
 
 def description(lst):
+    print("---------------------------------------------------------------------------------------------------------")
     print(f"Index: {lst[1]}\nName: {lst[0]}")
     if len(lst[2]) > 1:
         print(f"Types: {lst[2][0]}, {lst[2][1]}")
@@ -94,6 +107,7 @@ def description(lst):
     if lst[4]:
         print(f"Next evolution: {lst[4]}")
     print(f"Description: \n{lst[5]}")
+    print("---------------------------------------------------------------------------------------------------------")
 
 
 def start_up():
@@ -106,15 +120,15 @@ def start_up():
 def main_menu():
     print("Startup complete.")
     print("---------------------------------------------------------------------------------------------------------")
-    print("\nVer 0.4\nWelcome to the Pokedex.")
+    print("\nVer 0.4.1\nWelcome to the Pokedex.")
 
 
 def auto_or_reg(root_node):
     index = input("\n\nPlease select a search option below and enter the corrisponding letter."
-                  "\n        [1] Name    [2] Index    [3] Type\n\n")
+                  "\n                   [1] Name    [2] Index   \n\n")
     index = int(index) - 1
     choice = input("\n\nPlease select a if you want autocorrect enabled for this search."
-                   "\n          [Y] Yes         [N] No\n\n")
+                   "\n                  [Y] Yes         [N] No\n\n")
     index_list = ["Name", "Index", "Type"]
     if choice == "N":
         to_find = input(f"Please type the {index_list[index]} of the pokemon(s) "
@@ -124,9 +138,20 @@ def auto_or_reg(root_node):
         pass
     else:
         print("Entry not recognized.")
-        auto_or_reg()
+        auto_or_reg(root_node)
 
 
+# def test():
+#     root_node = build_tree(pokemon)
+#     list = [root_node]
+#     while list != []:
+#         current_node = list.pop()
+#         print(current_node.value[0])
+#         if current_node.children != [None, None]:
+#             list += current_node.children
 
 
 start_up()
+
+
+
